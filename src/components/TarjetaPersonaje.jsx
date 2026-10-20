@@ -1,4 +1,3 @@
-
 import useFavoritos from "../hooks/useFavoritos";
 
 export default function TarjetaPersonaje({ personaje }) {
@@ -16,9 +15,10 @@ export default function TarjetaPersonaje({ personaje }) {
         height="300"
         className="aspect-square w-full object-cover"
         onError={(e) => {
+          // Primero anulamos el handler para evitar un bucle si la imagen de reemplazo también falla
+          e.currentTarget.onerror = null;
           e.currentTarget.src =
             "https://rickandmortyapi.com/api/character/avatar/1.jpeg";
-          e.currentTarget.onerror = null;
         }}
       />
 
@@ -28,18 +28,15 @@ export default function TarjetaPersonaje({ personaje }) {
         </h2>
 
         <p className="mb-1 text-slate-300">
-          <strong className="text-white">Estado:</strong>{" "}
-          {personaje.status}
+          <strong className="text-white">Estado:</strong> {personaje.status}
         </p>
 
         <p className="mb-1 text-slate-300">
-          <strong className="text-white">Especie:</strong>{" "}
-          {personaje.species}
+          <strong className="text-white">Especie:</strong> {personaje.species}
         </p>
 
         <p className="mb-4 text-slate-300">
-          <strong className="text-white">Género:</strong>{" "}
-          {personaje.gender}
+          <strong className="text-white">Género:</strong> {personaje.gender}
         </p>
 
         <button
@@ -51,9 +48,7 @@ export default function TarjetaPersonaje({ personaje }) {
               : "bg-slate-700 text-white hover:bg-slate-600"
           }`}
         >
-          {favorito
-            ? "★ Quitar de favoritos"
-            : "☆ Agregar a favoritos"}
+          {favorito ? "★ Quitar de favoritos" : "☆ Agregar a favoritos"}
         </button>
       </div>
     </article>

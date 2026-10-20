@@ -1,29 +1,11 @@
 
-
 const API_URL = import.meta.env.VITE_RICK_MORTY_API;
 
-export async function obtenerPersonajes(nombre = "", pagina = 1) {
-  if (!API_URL) {
-    throw new Error("Falta configurar la URL de la API en .env");
-  }
-
-  const parametros = new URLSearchParams();
-
-  parametros.set("page", pagina);
-
-  if (nombre.trim() !== "") {
-    parametros.set("name", nombre.trim());
-  }
-
-  const url = `${API_URL}/character?${parametros.toString()}`;
-
+async function pedir(url) {
   const respuesta = await fetch(url);
 
   if (respuesta.status === 404) {
-    return {
-      resultados: [],
-      siguiente: null,
-    };
+    return { resultados: [], siguiente: null };
   }
 
   if (!respuesta.ok) {
@@ -36,4 +18,22 @@ export async function obtenerPersonajes(nombre = "", pagina = 1) {
     resultados: datos.results,
     siguiente: datos.info.next,
   };
+}
+
+export async function obtenerPersonajes(nombre = "") {
+  if (!API_URL) {
+    throw new Error("Falta configurar la URL de la API en .env");
+  }
+
+  const parametros = new URLSearchParams();
+
+  if (nombre.trim() !== "") {
+    parametros.set("name", nombre.trim());
+  }
+
+  return pedir(`${API_URL}/character?${parametros.toString()}`);
+}
+
+export async function obtenerSiguiente(url) {
+  return pedir(url);
 }

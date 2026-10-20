@@ -16,6 +16,10 @@ function App() {
 
   const listaMostrar = mostrarFavoritos ? favoritos : personajes;
 
+  // Carga y error solo importan en la vista de personajes, no en la de favoritos
+  const cargandoVista = cargando && !mostrarFavoritos;
+  const errorVista = mostrarFavoritos ? "" : error;
+
   function manejarBusqueda(nombre) {
     setMostrarFavoritos(false);
     buscarPersonajes(nombre);
@@ -37,10 +41,7 @@ function App() {
         </p>
       </header>
 
-      <Buscador
-        onBuscar={manejarBusqueda}
-        cargando={cargando}
-      />
+      <Buscador onBuscar={manejarBusqueda} cargando={cargando} />
 
       <ControlesFavoritos
         mostrarFavoritos={mostrarFavoritos}
@@ -48,46 +49,42 @@ function App() {
         cantidadFavoritos={favoritos.length}
       />
 
-      {cargando && !mostrarFavoritos && (
+      {cargandoVista && (
         <p className="my-8 text-center text-slate-300">
           Cargando personajes...
         </p>
       )}
 
-      {!mostrarFavoritos && error && (
+      {errorVista && (
         <p
           role="alert"
           className="mx-auto my-8 max-w-xl rounded-lg bg-red-950 p-4 text-center text-red-200"
         >
-          {error}
+          {errorVista}
         </p>
       )}
 
-      {(!cargando || mostrarFavoritos) && !(error && !mostrarFavoritos) && (
-        <>
-          {listaMostrar.length > 0 ? (
-            <ListaPersonajes personajes={listaMostrar} />
-          ) : (
-            <p className="my-8 text-center text-slate-300">
-              {mostrarFavoritos
-                ? "Todavía no guardaste favoritos."
-                : "No se encontraron personajes."}
-            </p>
-          )}
+      {listaMostrar.length > 0 && <ListaPersonajes personajes={listaMostrar} />}
 
-          {!mostrarFavoritos && siguiente && (
-            <div className="mt-8 text-center">
-              <button
-                type="button"
-                onClick={cargarMas}
-                disabled={cargandoMas}
-                className="rounded-lg bg-lime-400 px-6 py-3 font-bold text-slate-950 transition hover:bg-lime-300 disabled:cursor-wait disabled:opacity-50"
-              >
-                {cargandoMas ? "Cargando..." : "Cargar más"}
-              </button>
-            </div>
-          )}
-        </>
+      {listaMostrar.length === 0 && !cargandoVista && !errorVista && (
+        <p className="my-8 text-center text-slate-300">
+          {mostrarFavoritos
+            ? "Todavía no guardaste favoritos."
+            : "No se encontraron personajes."}
+        </p>
+      )}
+
+      {!mostrarFavoritos && siguiente && (
+        <div className="mt-8 text-center">
+          <button
+            type="button"
+            onClick={cargarMas}
+            disabled={cargandoMas}
+            className="rounded-lg bg-lime-400 px-6 py-3 font-bold text-slate-950 transition hover:bg-lime-300 disabled:cursor-wait disabled:opacity-50"
+          >
+            {cargandoMas ? "Cargando..." : "Cargar más"}
+          </button>
+        </div>
       )}
 
       <footer className="mt-12 text-center text-sm text-slate-400">
