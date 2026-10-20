@@ -2,7 +2,7 @@
 
 App para buscar personajes de Rick and Morty, marcarlos como favoritos y que persistan al recargar.
 
-🔗 Demo: _proximamente_
+🔗 Demo: [rick-morty-finder-gonzalo.netlify.app](https://rick-morty-finder-gonzalo.netlify.app)
 
 ---
 
